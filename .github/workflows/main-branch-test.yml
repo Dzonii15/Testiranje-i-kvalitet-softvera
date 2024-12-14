@@ -1,0 +1,13 @@
+name: Main branch test workflow
+run-name: ${{github.actor}} has pushed changes to main
+on:
+  push:
+    # specify branch filters
+    # this workflow should run only when a push was made to main branch
+    branches:
+      - main
+jobs:
+  Loggin-push-on-main-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Pushing on the main branch"
