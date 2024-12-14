@@ -14,6 +14,9 @@ namespace TaskManagementUnitTest
             // Arrange
             var project = new Project();
 
+            Assert.False(true);
+
+
             // Act & Assert
             Assert.Throws<UserNotOnProjectException>(() => project.AddTask(1, "Task Title", "Task Description"));
         }
