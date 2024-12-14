@@ -1,0 +1,56 @@
+name: Check if PR created is valid
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate-branch-name:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Check branch name pattern
+        id: branch-check
+        run: |
+          if [[ "${{ github.head_ref }}" =~ ^user/[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+$ ]]; then
+            echo "Branch name is valid."
+          else
+            echo "Branch name does not match the required pattern!"
+            exit 1
+          fi
+
+  run-unit-tests:
+    needs: validate-branch-name
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "8.0"
+
+      - name: Restore dependencies
+        run: dotnet restore ./TaskManagement
+
+      - name: Run Unit Tests
+        run: |
+          dotnet test ./TaskManagement/TaskManagementUnitTest/TaskManagementUnitTest.csproj --verbosity normal
+
+      - name: Comment on PR if error occurred
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "\u274C Unit tests have failed! Please fix the issues before merging."
+            });
