@@ -5,37 +5,39 @@ on:
     branches:
       - main
     paths:
-      - "AdvancedMathHelper"
+      - "AdvancedMathHelper/**"
 
 permissions:
-  pull-request: write
+  pull-requests: write
 
 jobs:
   run-unit-tests:
-    - name: Check out the code
-      uses: actions/checkout@v4
+    runs-on: ubuntu-latest
+    steps: # Added 'steps' to define the steps in the job
+      - name: Check out the code
+        uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: "8.0"
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "8.0"
 
-    - name: Restore dependencies
-      run: dotnet restore ./AdvancedMathHelper
+      - name: Restore dependencies
+        run: dotnet restore ./AdvancedMathHelper
 
-    - name: Run Unit Tests
-      run: |
-        dotnet test ./AdvancedMathHelper/AdvancedMathHelperUnitTests/AdvancedMathHelperUnitTests.csproj --verbosity normal
+      - name: Run Unit Tests
+        run: |
+          dotnet test ./AdvancedMathHelper/AdvancedMathHelperUnitTests/AdvancedMathHelperUnitTests.csproj --verbosity normal
 
-    - name: Comment on PR if tests failed
-      if: failure()
-      uses: actions/github-script@v7
-      with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
-        script: |
-          github.rest.issues.createComment({
-            issue_number: context.payload.pull_request.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: "\u274C Unit tests have failed! Please fix the issues before merging."
-          });
+      - name: Comment on PR if tests failed
+        if: failure() # Checks if the previous steps failed
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "❌ Unit tests have failed! Please fix the issues before merging."
+            });
