@@ -7,3 +7,10 @@
 /TaskManagement/TaskManagementUnitTest/bin/Debug/net8.0
 /TaskManagement/TaskManagementUnitTest/obj
 /TaskManagement/TaskManagement/obj
+
+
+/AdvancedMathHelper/.vs
+/AdvancedMathHelper/AdvancedMathHelper/bin/Debug/net8.0
+/AdvancedMathHelper/AdvancedMathHelperUnitTests/bin/Debug/net8.0
+/AdvancedMathHelper/AdvancedMathHelperUnitTests/obj
+/AdvancedMathHelper/AdvancedMathHelper/obj

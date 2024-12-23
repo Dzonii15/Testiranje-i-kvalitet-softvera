@@ -1,4 +1,4 @@
-name: Check if PR created is valid
+name: Task Management - PR validity check
 
 on:
   pull_request:
