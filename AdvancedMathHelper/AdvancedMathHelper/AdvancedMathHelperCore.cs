@@ -13,7 +13,7 @@ namespace AdvancedMathHelper
             int result = Enumerable.Range(1, target).Sum();
             return result;
              */
-
+            return 0;
             return target * (target + 1) / 2;
         }
 
